@@ -11,7 +11,7 @@ attached to the current repository.
 name: Clear all Github actions caches on sundays
 on:
   schedule:
-    - cron: "* * * * 0"
+    - cron: "0 0 * * 0"
   workflow_dispatch:
 
 jobs:
