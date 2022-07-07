@@ -1,5 +1,5 @@
-name: 'Clear Github Actions caches'
-description: 'Clears all Github Actions caches for a repository.'
+name: 'Wipe Github Actions cache'
+description: 'Wipes all Github Actions caches for a repository.'
 branding:
   icon: 'archive'
   color: 'orange'
@@ -30,8 +30,8 @@ runs:
         )"
         echo "::set-output name=cache_ids::$ids"
 
-    - name: Clear caches
-      id: clear
+    - name: Wipe caches
+      id: wipe
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
