@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Clear caches
-        uses: uses: easimon/wipe-cache@main
+        uses: easimon/wipe-cache@main
         with:
           dry-run: 'true'
 ```
