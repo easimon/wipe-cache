@@ -6,7 +6,7 @@ on:
 jobs:
   create-caches:
     name: Prepare action test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Init Cache 1
         uses: actions/cache@v3
@@ -27,7 +27,7 @@ jobs:
 
   test-action:
     name: Test action
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     needs: create-caches
 
     steps:
