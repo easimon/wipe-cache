@@ -28,7 +28,7 @@ runs:
           jq '.actions_caches[].id' |
           tr '\n' ' ' \
         )"
-       echo "cache_ids=$ids" >> $GITHUB_ENV
+       echo "cache_ids=$(echo $ids)" >> $GITHUB_ENV
 
     - name: Wipe caches
       id: wipe
