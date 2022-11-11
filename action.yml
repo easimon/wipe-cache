@@ -28,7 +28,7 @@ runs:
           jq '.actions_caches[].id' |
           tr '\n' ' ' \
         )"
-        echo "::set-output name=cache_ids::$ids"
+       echo "cache_ids=$ids" >> $GITHUB_ENV
 
     - name: Wipe caches
       id: wipe
@@ -36,7 +36,7 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        for id in ${{ steps. list-caches.outputs.cache_ids }}; do
+        for id in ${{ env.cache_ids }}; do
           if [[ "${{ inputs.dry-run }}" == 'true' ]]; then
             echo "would delete cache $id using following command:"
             echo gh api \
