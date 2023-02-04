@@ -18,9 +18,14 @@ jobs:
         with:
           path: .cache-test/two
           key: ${{ runner.os }}-test-2
+      - name: Init Cache 3
+        uses: actions/cache@v3
+        with:
+          path: .cache-test/three
+          key: ${{ runner.os }}-test-3
       - name: Fill Caches
         run: |
-          for i in one two; do
+          for i in one two three; do
             mkdir -p ".cache-test/$i"
             echo $i >> ".cache-test/$i/$i"
           done
@@ -38,3 +43,5 @@ jobs:
 
       - name: Wipe caches
         uses: ./.github/actions/wipe-cache
+        with:
+          page-size: 2
