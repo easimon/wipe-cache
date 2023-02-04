@@ -12,6 +12,10 @@ inputs:
     description: 'List caches only, do not clear them.'
     required: false
     default: 'false'
+  page-size:
+    description: 'Page size for cache listing.'
+    required: false
+    default: '100'
 runs:
   using: "composite"
   steps:
@@ -20,15 +24,37 @@ runs:
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
+        PAGE_SIZE: ${{ inputs.page-size }}
       run: |
-        ids="$(
+        function list_caches {
+          local pageindex="$1"
           gh api \
             -H 'Accept: application/vnd.github+json' \
-            "/repos/${GITHUB_REPOSITORY}/actions/caches" | \
-          jq '.actions_caches[].id' |
-          tr '\n' ' ' \
-        )"
-        echo "cache_ids=$ids" >> "$GITHUB_OUTPUT"
+            "/repos/${GITHUB_REPOSITORY}/actions/caches?per_page=${PAGE_SIZE}&page=${pageindex}"
+        }
+
+        pageindex=1
+
+        echo "fetching page ${pageindex}..."
+        first="$(list_caches "${pageindex}")"
+        total_count="$(jq -r '.total_count' <<< "${first}")"
+        all_ids="$(jq '.actions_caches[].id' <<< "${first}" | tr '\n' ' ')"
+
+        remaining="$((total_count-PAGE_SIZE))"
+        echo "  cache ids in page ${pageindex}: ${all_ids}, ${remaining} remaining."
+        while [[ $remaining > 0 ]]; do
+          pageindex="$((pageindex+1))"
+          echo "fetching page ${pageindex}..."
+          ids="$(list_caches "${pageindex}" | jq '.actions_caches[].id' | tr '\n' ' ')"
+
+          all_ids="${all_ids} ${ids}"
+          remaining="$((remaining-PAGE_SIZE))"
+          if [[ $remaining < 0 ]]; then remaining=0; fi
+          echo "  cache ids in page ${pageindex}: ${ids}, ${remaining} remaining."
+        done
+
+        echo "cache ids total: ${all_ids}"
+        echo "cache_ids=$all_ids" >> "$GITHUB_OUTPUT"
 
     - name: Wipe caches
       id: wipe
