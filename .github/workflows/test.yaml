@@ -9,17 +9,17 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Init Cache 1
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .cache-test/one
           key: ${{ runner.os }}-test-1
       - name: Init Cache 2
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .cache-test/two
           key: ${{ runner.os }}-test-2
       - name: Init Cache 3
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .cache-test/three
           key: ${{ runner.os }}-test-3
