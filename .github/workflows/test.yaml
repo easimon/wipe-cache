@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Check out Wipe-Cache action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: ./.github/actions/wipe-cache
 
